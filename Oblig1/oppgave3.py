@@ -1,9 +1,9 @@
 print("skriv første tall")
-firstNumber = float(input())
+firstNumber = float(input())#skriv inn en tall verdi
 print("skriv andre tall")
 secondNumber = float(input())
 
-gange = firstNumber * secondNumber
+gange = firstNumber * secondNumber#regner ut gange osv.
 dele = firstNumber / secondNumber
 pluss = firstNumber + secondNumber
 minus = firstNumber - secondNumber
@@ -18,3 +18,4 @@ print(firstNumber, "minus", secondNumber, "=", minus)
 print(firstNumber, "modulus", secondNumber, "=", modulo)
 print(firstNumber, "opphøyet i", secondNumber, "=", opphoye)
 print(firstNumber, "delt på", secondNumber, "rundet ned =", deleNedrunde)
+#koden skriver ut alle utregningene gjort fra linje 6-12
