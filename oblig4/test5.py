@@ -97,4 +97,14 @@ cards = [twoS, twoH, twoD, twoC,
          qS, qH, qD, qC,
          kS, kH, kD, kC,
          aS, aH, aD, aC]
-print(cards)
+#print(cards)
+cardList = cards.copy()
+#print(cardList)
+
+def playerCardRead(playerDraws):# scrap that mann
+    for cards in playerDraws:
+        print(f"{cards.name} of {cards.suit}")
+    for cards in playerDraws:
+        print(cards.value)
+
+playerCardRead(cardList)
