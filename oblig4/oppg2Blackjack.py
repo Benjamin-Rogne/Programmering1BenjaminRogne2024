@@ -1,14 +1,14 @@
 import random
 
 #gjør klar chips og lister osv...
-global playerBet
-global playerChips
+gameRound = 0
 global bigScore
+bigScore = 100
+playerChips = 100
 playerCardsList = []
 dealerCardsList = []
-playerChips = 100
-bigScore = 100
 
+#klasse for spillkort alle kortene deklareres nedover med navn type og tall/verdi
 class playingCard:
     def __init__(self, name, suit, value):
         self.name = name
@@ -108,8 +108,9 @@ cards = [twoS, twoH, twoD, twoC,
          kS, kH, kD, kC,
          aS, aH, aD, aC]
 
-#printer ut kort i format eks: king of hearts
+#leser av og summerer kortene som spilleren trekker
 def playerCardRead(playerDraws):
+    print("")
     print("your current cards are:")
     global totalPlayerCardValue
     for card in playerDraws:
@@ -122,9 +123,12 @@ def playerCardRead(playerDraws):
     print(f"with a total value of {totalPlayerCardValue}")
     if totalPlayerCardValue <= 20 :
         hitOrStand()
+    return totalPlayerCardValue
     
+#leser dealer trekk og summerer verdiene på kortene
 def dealersCardRead(dealerDraws):
     global totalDealerCardValue
+    print("")
     print("the dealers current cards are:")
     for card in dealerDraws:
         print(f"{card.name} of {card.suit}")
@@ -136,12 +140,15 @@ def dealersCardRead(dealerDraws):
     print(f"with a total value of {totalDealerCardValue}")
     return totalDealerCardValue
 
+#leser av delers første trekk og sier hva det er verdt
 def dealersfirstCardRead(dealerDraws):
+    print("")
     print("the dealers current known card is:")
     for cards in dealerDraws:
         print(f"{cards.name} of {cards.suit}")
     totalDealerCardValue = sum(cards.value for card in dealerDraws)
     print(f"with a total value of {totalDealerCardValue}")
+    print("")
 
 #trekker kort og fjerner kortet fra bunken
 def drawCard(cardList):
@@ -149,28 +156,38 @@ def drawCard(cardList):
     selectedCard = cardList.pop(index)
     return selectedCard
 
+#denne funksjonen trekker fra chips dersom du taper
 def playerLoseRound():
+    global playerChips
     print(f"You lost {playerBet} chips")
+    print("")
     playerChips = playerChips - playerBet
-    if playerChips >= 0:
+    if playerChips <= 0:
         playerLose()
 
+#denne funkjonen skjer etter du har gått tom for chips
 def playerLose():
+    print("")
     print("    GAME OVER!")
     print("you ran out of chips")
     print("")
     print("this games higest score")
     score = highScore()
     print(f"  was {score} chips")
+    print("")
 
-def hitOrStand():#fix denna
+#funksjon for hit eller stand 
+def hitOrStand():
     ans = False
     stand = False
     while ans == False:
+        print("")
+        print("")
         print("Hit or Stand?")
         print("h - Hit")
         print("s - Stand")
         hitOrStandAns = input("Answer: ")
+        print("")
         if hitOrStandAns == "h":
             playerDrawCard(cardList)
             playerCardRead(playerCards)
@@ -179,75 +196,119 @@ def hitOrStand():#fix denna
             ans = True
             stand = True
     return stand
-        
-def blackJack():
-    print("    BLACKJACK")
-    print("you win double chips")
-    playerChips = playerChips + (playerBet*2)
 
+#funksjon som spilles når du får blackjack  
+def blackJack():
+    global playerChips
+    print("")
+    print("     BLACKJACK")
+    print("you doubled your reward")
+    print("")
+    playerChips = playerChips + (playerBet*2)
+    return playerChips
+
+#når du vinner på normalt vis legger denne funksjonen til chips du betta
 def playerWin():
-    print("   YOU WIN!")
-    print(f"you earnd +{playerBet} chips")
+    global playerChips
+    print("")
+    print("      YOU WIN!")
+    print(f"you earnd {playerBet} chips")
     playerChips = playerChips + playerBet
 
+#denne funkjonen gjir beskjed om at runden var uavgjort og at ingen mister chips
 def noWinners():
+    print("")
     print("   It is a draw  ")
     print("you keep your chips")
-
+    print("")
+#dealer legger kortet til i lista si og fjerner det fra trekkebunken
 def dealerDrawCard(cards):
     dealerCards.append(drawCard(cards))
     return dealerCards
-
+#spiller legger kortet til i lista si og fjerner det fra trekkebunken
 def playerDrawCard(cardList):
     playerCards.append(drawCard(cardList))
     return playerCards
 
+#funksjon for utskrif av dealers kort og verdi er på kortene
 def dealerDraw17(cardList, dealerCards):
         totalDealerCardValue = 0
         totalDealerCardValue = dealersCardRead(dealerCards)
         while totalDealerCardValue <= 17:
             dealerCards.append(drawCard(cardList))  # Trekker et nytt kort og legger til dealerens kort
             totalDealerCardValue = dealersCardRead(dealerCards)
-        print("final dealer's hand:")
-        dealersCardRead(dealerCards)
 
-# skal tracke høyeste score du har hatt dette gamet
+#skal tracke høyeste score du har hatt dette gamet
 def highScore():
+    global bigScore
     if playerChips > bigScore:
         bigScore = playerChips
     return bigScore
 
-#chip better
-def chipBet():
+#her er det en rekke funksjoner for de forskjellige utfallene av spillet
+def winConditionCheck():
+    if totalPlayerCardValue > 21:
+        print("")
+        print("You got busted")
+        playerLoseRound()
+        print("")
+    elif totalPlayerCardValue == 21:
+        blackJack()
+    else:
+        dealerDraw17(cardList, dealerCards)
+        if totalDealerCardValue > 21:
+            playerWin()
+        elif totalPlayerCardValue > totalDealerCardValue:
+            playerWin()
+        elif totalPlayerCardValue < totalDealerCardValue:
+            print("")
+            print("  YOU LOSE!")
+            playerLoseRound()
+            print("")
+        elif totalPlayerCardValue == totalDealerCardValue:
+            noWinners()
+        else:
+            print("error")
 
+#funksjon for å bette chips
+def chipBet():
+    global playerBet
+    global playerChips
     bet = False
     while bet == False:
         print("")
         print(f"you have {playerChips} chips")
         print(f"how many do you wanna bet?")
         playerBet = int(input("Answer: "))
+        print("")
         if playerBet > 0 and playerBet <= playerChips:
             bet = True
-            print(f"you bet {playerBet} chips")
             return playerBet
         elif playerBet == 0:
             bet = False
+            print("")
             print(f"you can not bet 0 Chips")
             print(f"Unvalid bet please try again")
+            print("")
         elif playerBet > playerChips:
             bet = False
+            print("")
             print(f"you can not bet more Chips than what you have")
             print(f"Unvalid bet please try again")
+            print("")
         else:
+            print("")
             print(f"please chose a hole number")
             print(f"Unvalid bet please try again")
+            print("")
 
 
 #spørr spiller etter hvert fullført spill med gjenværende chips om de vil spille mer
 def wantToPlay(play):
     ans = False
     while ans == False:
-        print("do you wish to play?")
+        print("")
+        print("do you want to play?")
         print("y - Yes")
         print("n - No")
         wantToPlayAns = input("Answer: ")
@@ -264,41 +325,36 @@ def wantToPlay(play):
             play = play
             ans = True
         else:
+            print("")
             print("Unvalid answer please try again")
     return play
 
 while wantToPlay(1) == 1:
+    #kopierer lister for at bonken og de kortene spillerene trekker skal resette hver runde
     cardList = cards.copy()
     playerCards = playerCardsList.copy()
     dealerCards = dealerCardsList.copy()
 
-    gameRound = 0
+    #teller hvor mange runder du har spillt starter på runde 1
     gameRound = gameRound + 1
+    print("")
     print (f"Round {gameRound}")
     
     chipBet()
-
+    #her trekkes kortene til dealer kun det første er synlig frem til etter spiller velger stand
     dealerDrawCard(cardList)
     dealersfirstCardRead(dealerCards)
     dealerDrawCard(cardList)
     
+    #trekker de 2 første kortene for spiller derretter får man valget mellom hit og stand
     playerDrawCard(cardList)
     playerDrawCard(cardList)
     playerCardRead(playerCards)
-    
-    if totalPlayerCardValue > 21:
-        print("You got busted")
-        playerLoseRound()
-    elif totalPlayerCardValue == 21:
-        blackJack()
-    else:
-        dealerDraw17(cardList, dealerCards)
-        if totalPlayerCardValue > totalDealerCardValue:
-            playerWin()
-        elif totalPlayerCardValue > totalDealerCardValue:
-            print("YOU LOSE!")
-            playerLoseRound
-        elif totalPlayerCardValue > totalDealerCardValue:
-            noWinners()
-        print("beeg nono")
-    #highScore()
+
+    winConditionCheck()
+    highScore()
+    if playerChips == 0:
+        print("   Good Bye")
+        print("")
+        break
+        #dersom spiller ikke har flere chips vil spillet avslutte automatisk
