@@ -39,12 +39,9 @@ print()
 shopping_cart = {}
 
 # Forsøker å legge til 1 amd processor, 2 playstation 5 konsoller og 3 hdmi kabler
-ws.add_number_of_ware_to_shopping_cart("amd_processor",
-all_wares["amd_processor"], shopping_cart)
-ws.add_number_of_ware_to_shopping_cart ("playstation_5",
-all_wares["playstation_5"], shopping_cart, 2)
-ws.add_number_of_ware_to_shopping_cart ("hdmi_cable", all_wares["hdmi_cable"],
-shopping_cart, 4)
+ws.add_number_of_ware_to_shopping_cart("amd_processor", all_wares["amd_processor"], shopping_cart)
+ws.add_number_of_ware_to_shopping_cart ("playstation_5", all_wares["playstation_5"], shopping_cart, 2)
+ws.add_number_of_ware_to_shopping_cart ("hdmi_cable", all_wares["hdmi_cable"], shopping_cart, 4)
 
 # skriver ut handlevognen
 print()
