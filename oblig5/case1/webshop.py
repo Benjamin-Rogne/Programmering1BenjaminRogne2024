@@ -1,12 +1,15 @@
 #------------------------------------------
 #Oppgaver
 #------------------------------------------
+
+#denne funksjonen er en utskrift for vare verdier.
 def print_ware_information(ware):
     print(f"Name: {ware['name']}")
     print(f"Price: {int(ware['price'])},-")
     print(f"Number in stock: {ware['number_in_stock']}")
     print(f"Description: {ware['description']}")
 
+# regner ut vare rating med error melding dersom varen ikke har ratings
 def calculate_average_ware_rating(ware):
     try:
         average_rating = sum(ware['ratings']) / len(ware['ratings'])
@@ -16,12 +19,14 @@ def calculate_average_ware_rating(ware):
     except ZeroDivisionError:
         return "Error: Ratings not found"
 
+#denne funksjonen luker ut alle varer som ikke lenger finnes på lager
 def get_all_wares_in_stock(all_wares):
     all_wares = {
     key: value for key, value in all_wares.items() if value.get("number_in_stock") != 0
     }
     return all_wares
 
+#sjekker om antallet varer som skrives inn finnes eller ikke
 def is_number_of_ware_in_stock(all_wares, number_of_ware = 0 ,ware = {}):
     ware = all_wares[input('enter ware:')]
     number_of_ware =  int(input('enter number'))
@@ -30,6 +35,7 @@ def is_number_of_ware_in_stock(all_wares, number_of_ware = 0 ,ware = {}):
     else:
         return False
 
+# legger til varer i handlekurv med senarioer for lager status 
 def add_number_of_ware_to_shopping_cart(ware_key = "", ware = {}, shopping_cart = {}, number_of_ware = 1):
     current_number_in_stock = ware['number_in_stock']
     if ware['number_in_stock'] == 0:
@@ -51,6 +57,7 @@ def add_number_of_ware_to_shopping_cart(ware_key = "", ware = {}, shopping_cart 
     
     return shopping_cart
 
+# regner ut verdien av varer i handlekurv og retunerer verdien med tax lagt til
 def calculate_shopping_cart_price(shopping_cart, all_wares, tax = 1.25):
     total_cart_price = 0
     for ware in shopping_cart:

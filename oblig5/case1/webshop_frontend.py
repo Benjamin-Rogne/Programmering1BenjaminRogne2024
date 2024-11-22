@@ -1,6 +1,7 @@
 import webshop as ws
 from wallet import Wallet
 
+#dictionary med alle varene
 all_wares = {
     "amd_processor": {
         "name": "AMD Ryzen 9 5900X Processor",

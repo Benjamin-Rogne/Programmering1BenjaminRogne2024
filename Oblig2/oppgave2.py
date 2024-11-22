@@ -7,6 +7,6 @@ for x in TALL:
 
 #bruker while til å lage en oddetalls liste fra 9 til 101
 y = 7
-while y < 101:
+while y < 99:
     y = y + 2
     print(y)

@@ -12,3 +12,8 @@ dolphins_sleep_with_their_eyes_open = True
 
 if (dolphins_sleep_with_their_eyes_open == True):
     print(f"delfiner sover med ett øye åpent")
+
+a = 3
+if a in range(0,4):
+    print("ja")
+print("ja")
